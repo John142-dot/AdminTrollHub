@@ -1,0 +1,510 @@
+local admin = loadstring(game:HttpGet("https://raw.githubusercontent.com/SkireFr/Ouxie/main/Projects/Admin%20Library%20v2/Loader.lua"))():load({ name = "cool admin"; prefix = ";"; key = Enum.KeyCode.Semicolon; })
+local StarterGui = game:GetService("StarterGui")
+
+-- Print command
+admin:addcmd({"say","print"}, function(msg)
+    print(msg)
+end)
+
+-- Reset/Kill command
+admin:addcmd({"re","kill","reset"}, function(user)
+    local players = game:GetService("Players")
+    if user == "me" then
+        players.LocalPlayer.Character:BreakJoints()
+    else
+        user = players:FindFirstChild(user)
+        if user and user.Character then
+            local tool = players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool") or players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+            if tool then
+                tool:Activate()
+                user.Character:BreakJoints()
+            else
+                StarterGui:SetCore("SendNotification", {
+                    Title = "Notification";
+                    Text = "No tool found to kill user.";
+                    Duration = 5;
+                })
+            end
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Notification";
+                Text = "User not found.";
+                Duration = 5;
+            })
+        end
+    end
+end)
+
+-- Modern Bypass command
+admin:addcmd({"modernbypass"}, function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/T4FEyvHH"))()
+end)
+
+-- Legacy Bypass command
+admin:addcmd({"legacybypass"}, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua"))()
+end)
+
+-- Fly command
+admin:addcmd({"fly"}, function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/FRrkvfWz"))()
+end)
+
+-- Jump Power command
+admin:addcmd({"jumppower"}, function(power)
+    power = tonumber(power)
+    if power then
+        game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = power
+    else
+        StarterGui:SetCore("SendNotification", {
+            Title = "Notification";
+            Text = "Invalid jump power value.";
+            Duration = 5;
+        })
+    end
+end)
+
+-- Unjump Power command
+admin:addcmd({"unjumppower"}, function()
+    game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = 50
+end)
+
+-- Spin command
+local spinConnection
+admin:addcmd({"spin"}, function(speed)
+    speed = tonumber(speed)
+    if speed then
+        if spinConnection then
+            spinConnection:Disconnect()
+        end
+
+        local player = game:GetService("Players").LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+        spinConnection = game:GetService("RunService").Heartbeat:Connect(function()
+            humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.Angles(0, math.rad(speed), 0)
+        end)
+    else
+        StarterGui:SetCore("SendNotification", {
+            Title = "Notification";
+            Text = "Invalid spin speed value.";
+            Duration = 5;
+        })
+    end
+end)
+
+-- Unspin command
+admin:addcmd({"unspin"}, function()
+    if spinConnection then
+        spinConnection:Disconnect()
+        spinConnection = nil
+    end
+end)
+
+-- Speed command
+admin:addcmd({"speed"}, function(speed)
+    speed = tonumber(speed)
+    if speed then
+        game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = speed
+    else
+        StarterGui:SetCore("SendNotification", {
+            Title = "Notification";
+            Text = "Invalid speed value.";
+            Duration = 5;
+        })
+    end
+end)
+
+-- Unspeed command
+admin:addcmd({"unspeed"}, function()
+    game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = 16
+end)
+
+-- Rejoin command
+admin:addcmd({"rejoin"}, function()
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+end)
+
+-- Server Hop command
+admin:addcmd({"serverhop"}, function()
+    local servers = game:GetService("TeleportService"):GetLocalPlayerTeleportPaging("All", 1)
+    if #servers > 0 then
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[1].id)
+    else
+        StarterGui:SetCore("SendNotification", {
+            Title = "Notification";
+            Text = "No servers available to hop to.";
+            Duration = 5;
+        })
+    end
+end)
+
+-- Anti-Kick command
+admin:addcmd({"antikick"}, function()
+    local mt = getrawmetatable(game)
+    local oldNamecall = mt.__namecall
+    setreadonly(mt, false)
+
+    mt.__namecall = newcclosure(function(self, ...)
+        local method = getnamecallmethod()
+        if method == "Kick" then
+            return
+        end
+        return oldNamecall(self, ...)
+    end)
+end)
+
+-- Anti-AFK command
+admin:addcmd({"antiafk"}, function()
+    local vu = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+        vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    end)
+end)
+
+-- Executor command
+admin:addcmd({"executor"}, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/John142-dot/nameless-admin-v3/main/OMGEXECUYORV3"))()
+end)
+
+-- Keyboardtrolahubah command
+admin:addcmd({"keyboardtrolahubah"}, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/John142-dot/plabington/main/keyboardtrolahubah!"))()
+end)
+
+-- NoLimbs command
+admin:addcmd({"sit"}, function()
+    local player = game.Players.LocalPlayer
+
+    while not player.Character do
+        wait()
+    end
+
+    local character = player.Character
+    local humanoid = character:WaitForChild("Humanoid")
+
+    humanoid.Sit = true
+end)
+
+-- Antisit command
+admin:addcmd({"antisit"}, function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+
+    if Humanoid then
+        Humanoid.Seated = nil -- Disable the ability to sit
+    end
+end)
+
+-- Bang GUI command
+admin:addcmd({"bang"}, function(target, speed)
+    local AnimationId = "148840371"
+    local Anim = Instance.new("Animation")
+    Anim.AnimationId = "rbxassetid://"..AnimationId
+
+    local function playBangAnimation(humanoid, speed, behind)
+        local anim = humanoid:LoadAnimation(Anim)
+        anim:Play()
+        anim:AdjustSpeed(speed)
+
+        if behind then
+            local rootPart = humanoid.Parent:FindFirstChild("HumanoidRootPart")
+            if rootPart then
+                local rootCF = rootPart.CFrame
+                local behindCF = rootCF * CFrame.new(0, 0, -5) -- Adjust distance as needed
+                humanoid.Parent:SetPrimaryPartCFrame(behindCF)
+            end
+        end
+    end
+
+    if not speed then
+        speed = tonumber(target) or 1
+        target = nil
+    else
+        speed = tonumber(speed) or 1
+    end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    if target and target:lower() == "display" then
+        for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
+            local otherChar = otherPlayer.Character
+            if otherChar then
+                local otherHumanoid = otherChar:FindFirstChildOfClass("Humanoid")
+                if otherHumanoid then
+                    playBangAnimation(otherHumanoid, speed, true) -- Play behind other players
+                end
+            end
+        end
+    elseif target then
+        local targetPlayer = game.Players:FindFirstChild(target)
+        if targetPlayer then
+            local targetChar = targetPlayer.Character
+            if targetChar then
+                local targetHumanoid = targetChar:FindFirstChildOfClass("Humanoid")
+                if targetHumanoid then
+                    playBangAnimation(targetHumanoid, speed, true) -- Play behind the target player
+                end
+            end
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Notification",
+                Text = "Target player not found.",
+                Duration = 5
+            })
+        end
+    else
+        playBangAnimation(humanoid, speed, true) -- Play behind the local player
+    end
+end)
+
+admin:addcmd({"fpscheck"}, function()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "FPSGui"
+    gui.Parent = game.Players.LocalPlayer.PlayerGui
+
+    local fpsLabel = Instance.new("TextLabel")
+    fpsLabel.Name = "FPSLabel"
+    fpsLabel.Size = UDim2.new(0, 100, 0, 20)
+    fpsLabel.Position = UDim2.new(0, 10, 0, 10)
+    fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    fpsLabel.Font = Enum.Font.SourceSans
+    fpsLabel.TextSize = 14
+    fpsLabel.Text = "FPS: -"
+    fpsLabel.Parent = gui
+
+    local function updateFPS()
+        local fps = math.floor(1 / game:GetService("RunService").Heartbeat:Wait())
+        fpsLabel.Text = "FPS: " .. fps
+    end
+
+    updateFPS()
+end)
+
+-- Unbang command
+admin:addcmd({"unbang"}, function(target)
+    local AnimationId = "148840371"
+
+    local function stopBangAnimation(humanoid)
+        local animationTracks = humanoid:GetPlayingAnimationTracks()
+        for _, track in ipairs(animationTracks) do
+            if track.Animation.AnimationId == "rbxassetid://"..AnimationId then
+                track:Stop()
+            end
+        end
+    end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+    if target and target:lower() == "display" then
+        for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
+            local otherChar = otherPlayer.Character
+            if otherChar then
+                local otherHumanoid = otherChar:FindFirstChildOfClass("Humanoid")
+                if otherHumanoid then
+                    stopBangAnimation(otherHumanoid)
+                end
+            end
+        end
+    elseif target then
+        local targetPlayer = game.Players:FindFirstChild(target)
+        if targetPlayer then
+            local targetChar = targetPlayer.Character
+            if targetChar then
+                local targetHumanoid = targetChar:FindFirstChildOfClass("Humanoid")
+                if targetHumanoid then
+                    stopBangAnimation(targetHumanoid)
+                end
+            end
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Notification",
+                Text = "Target player not found.",
+                Duration = 5
+            })
+        end
+    else
+        if humanoid then
+            stopBangAnimation(humanoid)
+        end
+    end
+end)
+
+-- NoLimbs command
+admin:addcmd({"nolimbs"}, function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local function deleteLimb(limbName)
+        local limb = character:FindFirstChild(limbName)
+        if limb then
+            limb:Destroy()
+        end
+    end
+
+    local limbNames = {"Left Arm", "Right Arm", "Left Leg", "Right Leg"}
+
+    for _, limbName in ipairs(limbNames) do
+        deleteLimb(limbName)
+    end
+end)
+
+-- UNC TEST command
+admin:addcmd({"UNC TEST"}, function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-UNC-Test-13114"))()
+end)
+
+-- Headsit command with support for shortened display names
+admin:addcmd({"check", "goto", "shit"}, function(target)
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character
+
+    if not Character then
+        return
+    end
+
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    if not Humanoid then
+        return
+    end
+
+    local function findPlayer(displayName)
+        -- Function to find player by display name (full or shortened)
+        for _, player in ipairs(Players:GetPlayers()) do
+            local fullName = player.Name
+            local shortName = string.sub(fullName, 1, #displayName)
+            if fullName:lower() == displayName:lower() or shortName:lower() == displayName:lower() then
+                return player
+            end
+        end
+        return nil
+    end
+
+    local function sitOnHead(characterToSitOn)
+        local humanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+        local head = characterToSitOn:FindFirstChild("Head")
+        if head then
+            local offset = Vector3.new(0, head.Size.Y / 2 + 2, 0) -- Adjust the offset for floating height
+            humanoidRootPart.CFrame = head.CFrame * CFrame.new(offset)
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Notification",
+                Text = "Head not found for sitting.",
+                Duration = 5
+            })
+        end
+    end
+
+    -- Check if target is "display", meaning all players
+    if target and target:lower() == "display" then
+        for _, otherPlayer in ipairs(Players:GetPlayers()) do
+            local otherChar = otherPlayer.Character
+            if otherChar then
+                sitOnHead(otherChar)
+            end
+        end
+    else
+        -- Find player by full or shortened display name
+        local targetPlayer = findPlayer(target)
+        if targetPlayer then
+            local targetChar = targetPlayer.Character
+            if targetChar then
+                sitOnHead(targetChar)
+            end
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Notification",
+                Text = "Target player not found.",
+                Duration = 5
+            })
+        end
+    end
+end)
+
+-- Noclip command
+admin:addcmd({"noclip"}, function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character
+
+    if not Character then
+        return
+    end
+
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    if not Humanoid then
+        return
+    end
+
+    local function toggleNoclip()
+        if Humanoid:GetState() == Enum.HumanoidStateType.Physics then
+            Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+        else
+            Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+        end
+    end
+
+    -- Toggle noclip state
+    toggleNoclip()
+end)
+
+-- Unnoclip command
+admin:addcmd({"unnoclip"}, function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character
+
+    if not Character then
+        return
+    end
+
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    if not Humanoid then
+        return
+    end
+
+    local function disableNoclip()
+        if Humanoid:GetState() == Enum.HumanoidStateType.Physics then
+            Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+        end
+    end
+
+    -- Disable noclip state
+    disableNoclip()
+end)
+
+-- Fling command (self fling)
+admin:addcmd({"flingself"}, function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character
+
+    if not Character then
+        return
+    end
+
+    local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+    if not HumanoidRootPart then
+        return
+    end
+
+    local flingDistance = 5000 -- Distance to fling in studs
+
+    -- Calculate direction and apply velocity
+    local currentPosition = HumanoidRootPart.Position
+    local flingDirection = (currentPosition - Vector3.new(0, 0, 0)).unit -- Fling in opposite direction of origin (adjust as needed)
+    HumanoidRootPart.Velocity = flingDirection * flingDistance
+end)
+
